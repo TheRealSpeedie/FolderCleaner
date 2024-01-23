@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FolderCleaner.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ScanPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads</Value>
+    </Setting>
+    <Setting Name="OutputPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads/scanned</Value>
+    </Setting>
+    <Setting Name="DeleteZip" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PathForPictures" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Pictures</Value>
+    </Setting>
+    <Setting Name="PdfPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads/scanned/pdf</Value>
+    </Setting>
+    <Setting Name="WordPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads/scanned/word</Value>
+    </Setting>
+    <Setting Name="ExcelPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads/scanned/excel</Value>
+    </Setting>
+    <Setting Name="DaysUntilDeleting" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="DDDPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:/Users/akoesters/Downloads/scanned/ddd</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
