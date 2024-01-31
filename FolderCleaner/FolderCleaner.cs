@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Aspose.Imaging.FileFormats.OpenDocument.Objects.Graphic;
 
 namespace FolderCleaner
 {
@@ -42,7 +43,7 @@ namespace FolderCleaner
 		{
 			isRunning = true;
 			interval = new TimeSpan();
-			intervalTimeController = new TimeSpan(0, 1, 0);
+			intervalTimeController = new TimeSpan(0, 0, 10);
 			resetInterval = new AutoResetEvent(false);
 			cancellationTokenSource = new CancellationTokenSource();
 			cancellationToken = cancellationTokenSource.Token;
@@ -85,13 +86,14 @@ namespace FolderCleaner
 				string Pfad = Settings.Default.ScanPath;
 				string OutputPath = Settings.Default.OutputPath;
 				string PicturePath = Settings.Default.PathForPictures;
-				string PdfPath = Settings.Default.PdfPath;
-				string WordPath = Settings.Default.WordPath;
-				string ExelPath = Settings.Default.ExcelPath;
-				string DDDPath = Settings.Default.DDDPath;
+				string PdfPath = Settings.Default.OutputPath + "/pdf";
+				string WordPath = Settings.Default.OutputPath + "/word";
+				string ExelPath = Settings.Default.OutputPath + "/excel";	
+				string DDDPath = Settings.Default.OutputPath + "/ddd";
+				string exePath = Settings.Default.OutputPath + "/exe";
 
 				var currentList = GetFileList(Pfad);
-				if (!currentList.Contains(OutputPath))
+				if (!currentList.Contains(OutputPath) && Settings.Default.ScanPath != Settings.Default.OutputPath)
 				{
 					System.IO.Directory.CreateDirectory(OutputPath);
 				}
@@ -106,36 +108,56 @@ namespace FolderCleaner
 							if (extension.Equals(".webp", StringComparison.OrdinalIgnoreCase)) ConvertWEBPToPNG(item);
 							if (extension.Equals(".tiff", StringComparison.OrdinalIgnoreCase)) ConvertTIFFToPNG(item);
 							if (extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase)) ConvertBMPToPNG(item);
-							File.Move(item, Path.Combine(PicturePath, Path.GetFileName(item)));
+							CheckAndReplaceFile(PicturePath, item);
 						}
 						else if (extension.Equals(".zip", StringComparison.OrdinalIgnoreCase) && Settings.Default.DeleteZip)
 						{
-							ZipFile.ExtractToDirectory(item, item.Substring(0, item.Length - 4));
-							File.Delete(item);
+							string zipFilePath = item;
+							string extractPath = item.Substring(0, item.Length - 4);
+							using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
+							{
+								foreach (ZipArchiveEntry entry in archive.Entries)
+								{
+									string destinationPath = Path.Combine(extractPath, entry.FullName);
+									if (File.Exists(destinationPath))
+									{
+										File.Delete(destinationPath);
+									}
+
+									entry.ExtractToFile(destinationPath);
+								}
+							}
+
 						}
 						else if (extension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
 						{
 							if (!currentList.Contains(PdfPath)) System.IO.Directory.CreateDirectory(PdfPath);
-							File.Move(item, Path.Combine(PdfPath, Path.GetFileName(item)));
+							CheckAndReplaceFile(PdfPath, item);
+
 						}
 						else if (extension.Equals(".docx", StringComparison.OrdinalIgnoreCase))
 						{
 							if (!currentList.Contains(WordPath)) System.IO.Directory.CreateDirectory(WordPath);
-							File.Move(item, Path.Combine(WordPath, Path.GetFileName(item)));
+							CheckAndReplaceFile(WordPath, item);
 						}
 						else if (extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
 						{
 							if (!currentList.Contains(ExelPath)) System.IO.Directory.CreateDirectory(ExelPath);
-							File.Move(item, Path.Combine(ExelPath, Path.GetFileName(item)));
+							CheckAndReplaceFile(ExelPath, item);
 						}
 						else if (extension.Equals(".DDD", StringComparison.OrdinalIgnoreCase))
 						{
 							if (!currentList.Contains(DDDPath)) System.IO.Directory.CreateDirectory(DDDPath);
-							File.Move(item, Path.Combine(DDDPath, Path.GetFileName(item)));
+							CheckAndReplaceFile(DDDPath, item);
+						}
+						else if (extension.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+						{
+							if (!currentList.Contains(exePath)) System.IO.Directory.CreateDirectory(exePath);
+							CheckAndReplaceFile(exePath, item);
 						}
 						else
 						{
-							File.Move(item, Path.Combine(OutputPath, Path.GetFileName(item)));
+							CheckAndReplaceFile(OutputPath, item);
 						}
 					}
 				}
@@ -144,6 +166,14 @@ namespace FolderCleaner
 				stopwatch.Stop();
 				interval = intervalTimeController.Subtract(TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds));
 			}
+		}
+		public void CheckAndReplaceFile(string path, string item)
+		{
+			if (File.Exists(Path.Combine(path, Path.GetFileName(item))))
+			{
+				return;
+			}
+			File.Move(item, Path.Combine(path, Path.GetFileName(item)));
 		}
 		public void CheckScannedList()
 		{

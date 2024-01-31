@@ -37,7 +37,7 @@ namespace FolderCleaner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads/scanned")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads")]
         public string OutputPath {
             get {
                 return ((string)(this["OutputPath"]));
@@ -73,42 +73,6 @@ namespace FolderCleaner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads/scanned/pdf")]
-        public string PdfPath {
-            get {
-                return ((string)(this["PdfPath"]));
-            }
-            set {
-                this["PdfPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads/scanned/word")]
-        public string WordPath {
-            get {
-                return ((string)(this["WordPath"]));
-            }
-            set {
-                this["WordPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads/scanned/excel")]
-        public string ExcelPath {
-            get {
-                return ((string)(this["ExcelPath"]));
-            }
-            set {
-                this["ExcelPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int DaysUntilDeleting {
             get {
@@ -116,18 +80,6 @@ namespace FolderCleaner.Properties {
             }
             set {
                 this["DaysUntilDeleting"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/Users/akoesters/Downloads/scanned/ddd")]
-        public string DDDPath {
-            get {
-                return ((string)(this["DDDPath"]));
-            }
-            set {
-                this["DDDPath"] = value;
             }
         }
     }
