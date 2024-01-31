@@ -167,13 +167,21 @@ namespace FolderCleaner
 				interval = intervalTimeController.Subtract(TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds));
 			}
 		}
-		public void CheckAndReplaceFile(string path, string item)
+		public void CheckAndReplaceFile(string path, string item, int x = 2)
 		{
-			if (File.Exists(Path.Combine(path, Path.GetFileName(item))))
+			if (!File.Exists(Path.Combine(path, Path.GetFileName(item))))
 			{
-				return;
+				File.Move(item, Path.Combine(path, Path.GetFileName(item)));
 			}
-			File.Move(item, Path.Combine(path, Path.GetFileName(item)));
+			else if (!File.Exists(Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length-Path.GetExtension(item).Length) + "(" + x+")"+Path.GetExtension(item))))
+			{
+				File.Move(item, Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length - Path.GetExtension(item).Length) + "(" + x + ")" + Path.GetExtension(item)));
+			}
+			else
+			{
+				x++;
+				CheckAndReplaceFile(path, item, x);
+			}
 		}
 		public void CheckScannedList()
 		{
