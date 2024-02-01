@@ -17,6 +17,7 @@ namespace FolderCleaner
 	public partial class FolderCleaner : ServiceBase
 	{
 		private bool isRunning;
+		private string result;
 
 		CancellationTokenSource cancellationTokenSource;
 		CancellationToken cancellationToken;
@@ -112,22 +113,9 @@ namespace FolderCleaner
 						}
 						else if (extension.Equals(".zip", StringComparison.OrdinalIgnoreCase) && Settings.Default.DeleteZip)
 						{
-							string zipFilePath = item;
-							string extractPath = item.Substring(0, item.Length - 4);
-							using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
-							{
-								foreach (ZipArchiveEntry entry in archive.Entries)
-								{
-									string destinationPath = Path.Combine(extractPath, entry.FullName);
-									if (File.Exists(destinationPath))
-									{
-										File.Delete(destinationPath);
-									}
-
-									entry.ExtractToFile(destinationPath);
-								}
-							}
-
+							var path = Path.GetDirectoryName(item) + "\\" +CheckFile(Path.GetDirectoryName(item), Path.GetFileName(item));
+							ZipFile.ExtractToDirectory(item, path);
+							File.Delete(item);
 						}
 						else if (extension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
 						{
@@ -169,19 +157,24 @@ namespace FolderCleaner
 		}
 		public void CheckAndReplaceFile(string path, string item, int x = 2)
 		{
-			if (!File.Exists(Path.Combine(path, Path.GetFileName(item))))
+			File.Move(item, Path.Combine(path, CheckFile(path, Path.GetFileName(item))));
+		}
+		public string CheckFile(string path, string item, int x = 2)
+		{
+			if (!File.Exists(Path.Combine(path, Path.GetFileName(item))) && !Directory.Exists(Path.Combine(path, Path.GetFileName(item))))
 			{
-				File.Move(item, Path.Combine(path, Path.GetFileName(item)));
+				result = Path.GetFileName(item);
 			}
-			else if (!File.Exists(Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length-Path.GetExtension(item).Length) + "(" + x+")"+Path.GetExtension(item))))
+			else if (!File.Exists(Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length-Path.GetExtension(item).Length) + "(" + x+")"+Path.GetExtension(item))) && !Directory.Exists(Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length - Path.GetExtension(item).Length) + "(" + x + ")" + Path.GetExtension(item))))
 			{
-				File.Move(item, Path.Combine(path, Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length - Path.GetExtension(item).Length) + "(" + x + ")" + Path.GetExtension(item)));
+				result = Path.GetFileName(item).Substring(0, Path.GetFileName(item).Length - Path.GetExtension(item).Length) + "(" + x + ")" + Path.GetExtension(item);
 			}
 			else
 			{
 				x++;
-				CheckAndReplaceFile(path, item, x);
+				CheckFile(path, item, x);
 			}
+			return result;
 		}
 		public void CheckScannedList()
 		{
