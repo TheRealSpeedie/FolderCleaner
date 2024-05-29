@@ -11,6 +11,8 @@ using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Aspose.Imaging.FileFormats.OpenDocument.Objects.Graphic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace FolderCleaner
 {
@@ -103,17 +105,21 @@ namespace FolderCleaner
 				{
 					if (File.Exists(item))
 					{
+						//JFIF
 						string extension = Path.GetExtension(item);
-						if (extension.Equals(".png", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".gif", StringComparison.OrdinalIgnoreCase) || extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase) || extension.Equals(".webp", StringComparison.OrdinalIgnoreCase))
+						if (extension.Equals(".png", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jfif", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".gif", StringComparison.OrdinalIgnoreCase) || extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase) || extension.Equals(".webp", StringComparison.OrdinalIgnoreCase))
 						{
-							if (extension.Equals(".webp", StringComparison.OrdinalIgnoreCase)) ConvertWEBPToPNG(item);
-							if (extension.Equals(".tiff", StringComparison.OrdinalIgnoreCase)) ConvertTIFFToPNG(item);
-							if (extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase)) ConvertBMPToPNG(item);
-							CheckAndReplaceFile(PicturePath, item);
+							string path = item;
+							if (extension.Equals(".webp", StringComparison.OrdinalIgnoreCase)) path = OutputPath + "/" + ConvertWEBPToPNG(item);
+							if (extension.Equals(".tiff", StringComparison.OrdinalIgnoreCase)) path = OutputPath + "/" + ConvertTIFFToPNG(item);
+							if (extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase)) path = OutputPath + "/" + ConvertBMPToPNG(item);
+							if (extension.Equals(".jfif", StringComparison.OrdinalIgnoreCase)) path = OutputPath + "/" + ConvertJfifToPng(item);
+							CheckAndReplaceFile(PicturePath, path);
 						}
 						else if (extension.Equals(".zip", StringComparison.OrdinalIgnoreCase) && Settings.Default.DeleteZip)
 						{
-							var path = Path.GetDirectoryName(item) + "\\" +CheckFile(Path.GetDirectoryName(item), Path.GetFileName(item));
+							var path = Path.GetDirectoryName(item) + "\\" + CheckFile(Path.GetDirectoryName(item), Path.GetFileName(item));
+							path = path.Substring(0, path.Length - 4);
 							ZipFile.ExtractToDirectory(item, path);
 							File.Delete(item);
 						}
@@ -161,6 +167,14 @@ namespace FolderCleaner
 		}
 		public string CheckFile(string path, string item, int x = 2)
 		{
+			if(path == Settings.Default.OutputPath || path == "C:\\Users\\akoesters\\Downloads")
+			{
+				int count = CountFileNameOccurrences(path, item);
+				if (count <= 1)
+				{
+					return Path.GetFileName(item);
+				}
+			}
 			if (!File.Exists(Path.Combine(path, Path.GetFileName(item))) && !Directory.Exists(Path.Combine(path, Path.GetFileName(item))))
 			{
 				result = Path.GetFileName(item);
@@ -209,7 +223,7 @@ namespace FolderCleaner
 				}
 			}
 		}
-		public void ConvertWEBPToPNG(string pathToWEBP)
+		public string ConvertWEBPToPNG(string pathToWEBP)
 		{
 			var folder = Settings.Default.ScanPath;
 			using (var image = Aspose.Imaging.Image.Load(Path.Combine(folder, Path.GetFileName(pathToWEBP))))
@@ -218,18 +232,42 @@ namespace FolderCleaner
 				image.Save(Path.Combine(folder, Path.ChangeExtension(Path.GetFileName(pathToWEBP), ".png")), exportOptions);
 			}
 			File.Delete(pathToWEBP);
+			return Path.ChangeExtension(Path.GetFileName(pathToWEBP), ".png");
 		}
-		public void ConvertTIFFToPNG(string pathToTIFF)
+		public string ConvertTIFFToPNG(string pathToTIFF)
 		{
 			Bitmap bm = new Bitmap(Path.GetFileName(pathToTIFF));
 			bm.Save(Path.ChangeExtension(Path.GetFileName(pathToTIFF), ".png"), ImageFormat.Png);
 			File.Delete(pathToTIFF);
+			return Path.ChangeExtension(Path.GetFileName(pathToTIFF), ".png");
 		}
-		public void ConvertBMPToPNG(string pathToBMP)
+
+		public string ConvertBMPToPNG(string pathToBMP)
 		{
-			Bitmap bm = new Bitmap(Path.GetFileName(pathToBMP));
-			bm.Save(Path.ChangeExtension(Path.GetFileName(pathToBMP), ".png"), ImageFormat.Png);
-			File.Delete(pathToBMP);
+            string newFilePath = Path.ChangeExtension(pathToBMP, ".png");
+
+            using (Bitmap bm = new Bitmap(pathToBMP))
+            {
+                bm.Save(newFilePath, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            File.Delete(pathToBMP);
+            return Path.GetFileName(newFilePath);
+        }
+		public string ConvertJfifToPng(string jfifFilePath)
+		{
+			using (Image jfifImage = Image.FromFile(jfifFilePath))
+			{
+				using (Bitmap pngImage = new Bitmap(jfifImage.Width, jfifImage.Height))
+				{
+					using (Graphics g = Graphics.FromImage(pngImage))
+					{
+						g.DrawImage(jfifImage, 0, 0);
+					}
+					pngImage.Save(Path.Combine(Settings.Default.ScanPath, Path.ChangeExtension(Path.GetFileName(jfifFilePath), ".png")), ImageFormat.Png);
+				}
+			}
+			File.Delete(jfifFilePath);
+			return Path.ChangeExtension(Path.GetFileName(jfifFilePath), ".png");
 		}
 		public List<string> GetFileList(string Root)
 		{
@@ -240,6 +278,14 @@ namespace FolderCleaner
 			FileArray.AddRange(Files);
 			FileArray.AddRange(Folders);
 			return FileArray;
+		}
+		public int CountFileNameOccurrences(string directoryPath, string fileName)
+		{
+			DirectoryInfo directory = new DirectoryInfo(directoryPath);
+
+			int count = directory.GetFiles().Count(file => file.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+			return count;
 		}
 	}
 }
