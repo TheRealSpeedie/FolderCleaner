@@ -46,5 +46,17 @@ namespace FolderCleaner.Properties {
                 this["DaysUntilDeleting"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Users\\\\akoesters")]
+        public string PathToUser {
+            get {
+                return ((string)(this["PathToUser"]));
+            }
+            set {
+                this["PathToUser"] = value;
+            }
+        }
     }
 }

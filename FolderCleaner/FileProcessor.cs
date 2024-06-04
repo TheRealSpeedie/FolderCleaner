@@ -14,8 +14,8 @@ namespace FolderCleaner
 {
     public class FileProcessor
     {
-        private string _Downloadpath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-        private string _PicturePath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string _Downloadpath = Settings.Default.PathToUser + "\\Downloads";
+        private string _PicturePath = Settings.Default.PathToUser + "\\Pictures";
         private string _PdfPath;
         private string _WordPath;
         private string _ExelPath;
@@ -27,6 +27,7 @@ namespace FolderCleaner
         public FileProcessor(EventLog eventLog)
         {
             _eventlog = eventLog;
+            eventLog.WriteEntry("Path:" + _Downloadpath);
             setUpPathAndFolder();
             this.currentList = GetFileList(_Downloadpath);
         }

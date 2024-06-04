@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceProcess;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.IO.Compression;
-using FolderCleaner.Properties;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Aspose.Imaging.FileFormats.OpenDocument.Objects.Graphic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
+
 
 namespace FolderCleaner
 {
     public partial class FolderCleaner : ServiceBase
     {
         private bool isRunning;
-        private string result;
 
         private FileProcessor _fileprocessor;
 
@@ -52,7 +42,7 @@ namespace FolderCleaner
             resetInterval = new AutoResetEvent(false);
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-
+            eventLog.WriteEntry("before Fileprocessor");
             _fileprocessor = new FileProcessor(eventLog);
 
             eventLog.WriteEntry("Successfully Started");
