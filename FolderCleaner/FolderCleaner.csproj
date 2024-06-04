@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileProcessor.cs" />
     <Compile Include="FolderCleaner.cs">
       <SubType>Component</SubType>
     </Compile>

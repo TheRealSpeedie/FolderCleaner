@@ -2,17 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FolderCleaner.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ScanPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:/Users/akoesters/Downloads</Value>
-    </Setting>
-    <Setting Name="OutputPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:/Users/akoesters/Downloads</Value>
-    </Setting>
     <Setting Name="DeleteZip" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="PathForPictures" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:/Users/akoesters/Pictures</Value>
     </Setting>
     <Setting Name="DaysUntilDeleting" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
