@@ -9,7 +9,7 @@
       <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="PathToUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\\Users\\akoesters</Value>
+      <Value Profile="(Default)">[Enter here ur User path as well]</Value>
     </Setting>
   </Settings>
 </SettingsFile>
