@@ -12,9 +12,11 @@ Deletes files that are older than a specified period (e.g., 30 days).
 2. Open FolderCleaner.exe.config 
 3. Go to PathToUser
 4. Enter ur Username
-5. Repeat that for the files FolderCleaner/Properties/Settings.Designer.cs and FolderCleaner/Properties/Settings.settings
-6. Open cmd with Admin rights
-7. Enter 
+5. Repeat that for the files
+   - FolderCleaner/Properties/Settings.Designer.cs
+   - FolderCleaner/Properties/Settings.settings
+7. Open cmd with Admin rights
+8. Enter 
 ```CMD
 sc create "FolderCleaner" binpath= "[Path to unzipped FolderCleaner.exe]" 
 ```
