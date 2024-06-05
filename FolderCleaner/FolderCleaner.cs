@@ -42,8 +42,6 @@ namespace FolderCleaner
             resetInterval = new AutoResetEvent(false);
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
-            eventLog.WriteEntry("before Fileprocessor");
-            _fileprocessor = new FileProcessor(eventLog);
 
             eventLog.WriteEntry("Successfully Started");
             Task task = Task.Run(() => ScanFolder(cancellationToken), cancellationToken);
@@ -80,6 +78,7 @@ namespace FolderCleaner
                 if (resetInterval.WaitOne(interval))
                     continue;
                 Stopwatch stopwatch = Stopwatch.StartNew();
+                _fileprocessor = new FileProcessor(eventLog);
                 _fileprocessor.ProcessFiles();
                 stopwatch.Stop();
                 interval = intervalTimeController.Subtract(TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds));
