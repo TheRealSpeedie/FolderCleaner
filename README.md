@@ -12,7 +12,7 @@ Deletes files that are older than a specified period (e.g., 30 days).
 2. Open FolderCleaner.exe.config 
 3. Go to PathToUser
 4. Enter ur Username
-5. Repeat that for the files
+5. If you use the code -> Repeat that for the files
    - FolderCleaner/Properties/Settings.Designer.cs
    - FolderCleaner/Properties/Settings.settings
 7. Open cmd with Admin rights
