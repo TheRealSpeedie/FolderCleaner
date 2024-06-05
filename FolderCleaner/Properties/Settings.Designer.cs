@@ -49,7 +49,7 @@ namespace FolderCleaner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Users\\\\akoesters")]
+        [global::System.Configuration.DefaultSettingValueAttribute("[Add User path]")]
         public string PathToUser {
             get {
                 return ((string)(this["PathToUser"]));
