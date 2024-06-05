@@ -1,8 +1,14 @@
-FolderCleaner
+# Folder Cleaner
+## What is it?
+Der FolderCleaner überwacht den Download Ordner und führt regelmäßig Wartungsaufgaben durch. Diese beinhalten das Sortieren von Dateien in Unterordner basierend auf Dateitypen oder Bilder werden in das Windows verzeichnis Bilder des Benutzers verschoben. Ebenfallls werden Daten automatische gelöscht, die ein bestimmtes Alter überschritten haben. Dieser Service hilft, Ordnung zu halten und den Speicherplatz effizient zu nutzen.
 
-# What is it?
+### Funktionen:
+- Überwacht kontinuierlich einen definierten Ordner.
+Sortiert Dateien automatisch in vordefinierte Unterordner (z. B. nach Dateityp oder Datum).
+- Löscht Dateien, die älter sind als eine vorgegebene Zeitspanne (z. B. 30 Tage).
 
-# Setup
+
+## Setup
 1. Download Release
 2. Open FolderCleaner.exe.config 
 3. Go to PathToUser
