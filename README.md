@@ -42,8 +42,8 @@ With **FolderCleaner**, you can **maintain order** and **optimize storage space*
 -  Support for multiple folders (e.g., Desktop, Documents).
 -  Cloud storage integration (OneDrive, Google Drive, etc.).
     
-🤝 Contributing
+## 🤝 Contributing
 We welcome contributions! Feel free to fork the repo, submit issues, or create pull requests.
 
-📜 License
+## 📜 License
 This project is licensed under the MIT License – see the LICENSE file for details.
